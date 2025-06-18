@@ -127,15 +127,15 @@ IGNORE 1 LINES;
 -- Checking For Duplicate
 WITH Dup1 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country 
-										,	Reported_number_of_people_receiving_ART 
-										,	Estimated_number_of_people_living_with_HIV_median  
-										,	Estimated_number_of_people_living_with_HIV_min  
-										,	Estimated_number_of_people_living_with_HIV_max 
-										,	`Estimated_ART_coverage_among_people_living_with_HIV_(%)_median` 
-										,	`Estimated_ART_coverage_among_people_living_with_HIV_(%)_min` 
-										,	`Estimated_ART_coverage_among_people_living_with_HIV_(%)_max` 
-										,	WHO_Region  ) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY	   Country 
+				        ,  Reported_number_of_people_receiving_ART 
+				        ,  Estimated_number_of_people_living_with_HIV_median  
+					,  Estimated_number_of_people_living_with_HIV_min  
+					,  Estimated_number_of_people_living_with_HIV_max 
+					,  `Estimated_ART_coverage_among_people_living_with_HIV_(%)_median` 
+					,  `Estimated_ART_coverage_among_people_living_with_HIV_(%)_min` 
+					,  `Estimated_ART_coverage_among_people_living_with_HIV_(%)_max` 
+					,   WHO_Region  ) AS Row_Numb
 										
 FROM hiv_cases.coverage_by_country )
 
@@ -145,15 +145,15 @@ WHERE Row_Numb > 1
 
 WITH Dup2 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country 
-										,	Reported_number_of_children_receiving_ART
-										,	Estimated_number_of_children_needing_ART_methods_median 
-										,	Estimated_number_of_children_needing_ART_methods_min 
-										,	Estimated_number_of_children_needing_ART_methods_max 
-										,	`Estimated_ART_coverage_among_children_(%)_median`
-										,	`Estimated_ART_coverage_among_children_(%)_min` 
-										,	`Estimated_ART_coverage_among_children_(%)_max`
-										,	WHO_Region  ) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY	     Country 
+					  ,  Reported_number_of_children_receiving_ART
+					  ,  Estimated_number_of_children_needing_ART_methods_median 
+					  ,  Estimated_number_of_children_needing_ART_methods_min 
+					  ,  Estimated_number_of_children_needing_ART_methods_max 
+				          ,  `Estimated_ART_coverage_among_children_(%)_median`
+					  ,  `Estimated_ART_coverage_among_children_(%)_min` 
+					  ,  `Estimated_ART_coverage_among_children_(%)_max`
+					  ,   WHO_Region  ) AS Row_Numb
 FROM hiv_cases.pediatric_coverage_by_country)
 
 SELECT *
@@ -162,12 +162,12 @@ WHERE Row_Numb > 1
 
 WITH Dup3 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country 
-										,	YEAR 
-										,	Count_median 
-										,	Count_min 
-										,	Count_max 
-										,	WHO_Region  ) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY	       Country 
+					   ,   YEAR 
+					   ,   Count_median 
+					   ,   Count_min 
+					   ,   Count_max 
+					   ,   WHO_Region  ) AS Row_Numb
 FROM hiv_cases.cases_adult_15_to_49_by_country)
 
 SELECT *
@@ -176,12 +176,12 @@ WHERE Row_Numb > 1
 
 WITH Dup4 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country
-										,	YEAR
-										,	Count_median
-										,	Count_min 
-										,	Count_max
-										,	WHO_Region) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY		 Country
+					     ,	 YEAR
+					     ,	 Count_median
+					     ,	 Count_min 
+					     ,	 Count_max
+					     ,	 WHO_Region) AS Row_Numb
 FROM hiv_cases.death_by_country )
 
 SELECT *
@@ -190,12 +190,12 @@ WHERE Row_Numb > 1
 
 WITH Dup5 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country 
-										,	YEAR 
-										,	Count_median 
-										,	Count_min 
-										,	Count_max 
-										,	WHO_Region ) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY		  Country 
+					      ,	  YEAR 
+					      ,	  Count_median 
+					      ,	  Count_min 
+					      ,	  Count_max 
+					      ,	  WHO_Region ) AS Row_Numb
 FROM hiv_cases.people_living_with_hiv)
 
 SELECT *
@@ -204,15 +204,15 @@ WHERE Row_Numb > 1
 
 WITH Dup6 AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY		Country 
-										,	Received_Antiretrovirals 
-										,	Needing_antiretrovirals_median 
-										,	Needing_antiretrovirals_min  
-										,	Needing_antiretrovirals_max 
-										,	Percentage_Recieved_median 
-										,	Percentage_Recieved_min 
-										,	Percentage_Recieved_max 
-										,	WHO_Region ) AS Row_Numb
+   ,	Row_Number() OVER (PARTITION BY		    Country 
+					        ,   Received_Antiretrovirals 
+						,   Needing_antiretrovirals_median 
+						,   Needing_antiretrovirals_min  
+						,   Needing_antiretrovirals_max 
+						,   Percentage_Recieved_median 
+						,   Percentage_Recieved_min 
+						,   Percentage_Recieved_max 
+						,   WHO_Region ) AS Row_Numb
 FROM hiv_cases.prevention_of_mother_to_child)
 
 SELECT *
@@ -297,8 +297,8 @@ ORDER BY YEAR DESC, Country ASC
 
 -- Cases Per Year
 SELECT	Country
-	,	Year
-    ,	Count_median AS Cases
+,	Year
+,	Count_median AS Cases
 FROM hiv_cases.people_living_with_hiv
 
 -- Children Recieving ART
@@ -331,10 +331,10 @@ FROM hiv_cases.prevention_of_mother_to_child
 -- Creating A Table With Number of Cases, Living With HIV, Received ART And Death
 WITH HIV_DEATHS AS (
 SELECT 	DISTINCT(Country)
-	,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
-	,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
-	,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
-    , 	WHO_Region
+,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
+,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
+,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
+, 	WHO_Region
 FROM hiv_cases.death_by_country
 ORDER BY Country ASC )
 SELECT 
@@ -352,10 +352,10 @@ ORDER BY COUNTRY ASC
 -- Total Number Of People Living With HIV, Received ART, Deaths With Percentage Based On WHO Region
 WITH HIV_DEATHS AS (
 SELECT 	DISTINCT(Country)
-	,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
-	,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
-	,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
-    , 	WHO_Region
+,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
+,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
+,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
+, 	WHO_Region
 FROM hiv_cases.death_by_country
 ORDER BY Country ASC )
 
@@ -386,7 +386,7 @@ LIMIT 5
 
 -- Top 5 Received ART 
 SELECT 	Country
-	,	Reported_number_of_people_receiving_ART AS people_received_ART
+,	Reported_number_of_people_receiving_ART AS people_received_ART
  FROM hiv_cases.coverage_by_country   
  ORDER BY people_received_ART DESC
  LIMIT 5
@@ -414,16 +414,16 @@ ORDER BY Year ASC
 -- People Living with HIV, Percentage with ART and Percentage Died with HIV In The World
 WITH HIV_DEATHS AS (
 SELECT 	DISTINCT(Country)
-	,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
-	,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
-	,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
-    , 	WHO_Region
+,	MAX(Count_median) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_median
+,	MAX(Count_min) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_min
+,	MAX(Count_max) OVER (PARTITION BY Country ORDER BY COUNTRY ASC) AS Count_max
+, 	WHO_Region
 FROM hiv_cases.death_by_country
 ORDER BY Country ASC )
 	
 SELECT	SUM(A.Estimated_number_of_people_living_with_HIV_median) AS People_living_with_HIV
- ,		(SUM(A.Reported_number_of_people_receiving_ART) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Percentage_with_ART
- ,		(SUM(B.Count_median) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Death_Percentage
+,	(SUM(A.Reported_number_of_people_receiving_ART) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Percentage_with_ART
+,	(SUM(B.Count_median) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Death_Percentage
 FROM hiv_cases.coverage_by_country A
 INNER JOIN HIV_DEATHS B
 	ON A.Country = B.Country
