@@ -27,7 +27,7 @@ IGNORE 1 LINES;
 -- Checking for Duplicate
 WITH Dup AS(
 SELECT 	*
-	,	Row_Number() OVER (PARTITION BY	 	Country
+	,	Row_Number() OVER (PARTITION BY	Country
 					,	Year
                                         ,	Industry
                                         ,	`AI_Adoption_Rate_(%)`
