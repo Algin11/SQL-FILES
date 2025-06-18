@@ -28,7 +28,7 @@ IGNORE 1 LINES;
 WITH Dup AS(
 SELECT 	*
 	,	Row_Number() OVER (PARTITION BY	 	Country
-										,	Year
+					,	Year
                                         ,	Industry
                                         ,	`AI_Adoption_Rate_(%)`
                                         ,	`AI-Generated_Content_Volume_(TBs_per_year)`
@@ -66,12 +66,12 @@ WHERE  Country IS NULL
 -- Data Manipulation
 -- Highest AI Generated Volume every Year
 SELECT	Country
-	,	Year
+    ,	Year
     ,	`AI-Generated_Content_Volume_(TBs_per_year)`
     ,	Top_AI_Tools_Used
 FROM  global_ai.global_ai
 WHERE `AI-Generated_Content_Volume_(TBs_per_year)` in ( SELECT MAX(`AI-Generated_Content_Volume_(TBs_per_year)`)
-														FROM  global_ai.global_ai
+							FROM  global_ai.global_ai
                                                         GROUP BY YEAR)
 ORDER BY YEAR DESC
 
@@ -89,127 +89,125 @@ ORDER BY AI_Generated_Content_Volume DESC
 				FROM global_ai.global_ai
 				GROUP BY YEAR, Top_AI_Tools_Used
 								)
-	,	RankedCTE AS (
+			,	RankedCTE AS (
 						SELECT 	*
 							,	RANK() OVER (PARTITION BY YEAR ORDER BY Count DESC) AS ranking
 						FROM CTE )
 								
 SELECT 	YEAR
-	,	Top_AI_Tools_Used, Count
+,	Top_AI_Tools_Used, Count
 FROM RankedCTE 
 WHERE ranking = 1
 ORDER BY YEAR DESC
         
 -- The most Used tool All The Time(2020 to 2025)
-SELECT  	distinct(Top_AI_Tools_Used)
-	,		COUNT(Top_AI_Tools_Used) AS Count
+SELECT  distinct(Top_AI_Tools_Used)
+     ,   COUNT(Top_AI_Tools_Used) AS Count
 FROM global_ai.global_ai
 GROUP BY Top_AI_Tools_Used
 ORDER BY Count DESC
 
 -- Revenue Increased per year
 SELECT 	Country
-	,	Year
+    ,	Year
     ,	`Revenue_Increase_Due_to_AI_(%)`
 FROM global_ai.global_ai
-ORDER BY 	Year DESC
-		,	`Revenue_Increase_Due_to_AI_(%)` DESC
+ORDER BY 	Year DESC , `Revenue_Increase_Due_to_AI_(%)` DESC
         
 -- Market ShareHolder of AI tools 
-  SELECT  	Year
-		,	Top_AI_Tools_Used
-		,	`Market_Share_of_AI_Companies_(%)`
-        ,	Country
+  SELECT  Year
+     ,    Top_AI_Tools_Used
+     ,	  `Market_Share_of_AI_Companies_(%)`
+     ,     Country
   FROM global_ai.global_ai
-  ORDER BY 	YEAR DESC
-		,	`Market_Share_of_AI_Companies_(%)` DESC
+  ORDER BY 	YEAR DESC , `Market_Share_of_AI_Companies_(%)` DESC
 
 -- Highest Market ShareHolder per year
- SELECT  	Year
-		,	Top_AI_Tools_Used
-		,	`Market_Share_of_AI_Companies_(%)`
-        ,	Country
+ SELECT   Year
+     ,	  Top_AI_Tools_Used
+     ,    `Market_Share_of_AI_Companies_(%)`
+     ,    Country
   FROM global_ai.global_ai
   WHERE `Market_Share_of_AI_Companies_(%)` IN (	SELECT MAX(`Market_Share_of_AI_Companies_(%)`)
-												FROM global_ai.global_ai
+						FROM global_ai.global_ai
                                                 GROUP BY YEAR)
-  ORDER BY 	YEAR DESC
+  ORDER BY  YEAR DESC
   
   -- Table For Job loss due to AI
-SELECT  	Year
-		,	Country
-        ,	Industry
-        ,	Top_AI_Tools_Used
-		,	`Job_Loss_Due_to_AI_(%)`
+SELECT  Year
+     ,	Country
+     ,	Industry
+     ,	Top_AI_Tools_Used
+     ,	`Job_Loss_Due_to_AI_(%)`
 FROM global_ai.global_ai
 ORDER BY YEAR DESC, `Job_Loss_Due_to_AI_(%)` DESC
 
 --  Average Job loss Per Year due to AI
-SELECT  	Year
-		,	ROUND(AVG(`Job_Loss_Due_to_AI_(%)`), 2) AS Percent_Job_Loss
+SELECT  Year
+     ,	ROUND(AVG(`Job_Loss_Due_to_AI_(%)`), 2) AS Percent_Job_Loss
 FROM global_ai.global_ai
 GROUP BY Year
 ORDER BY YEAR DESC 
 
 -- Industry With the Highest Jobloss from 2020 to 2025 due to AI
 SELECT	Industry
-	,	ROUND(AVG(`Job_Loss_Due_to_AI_(%)`),2) AS Job_Loss
+     ,	ROUND(AVG(`Job_Loss_Due_to_AI_(%)`),2) AS Job_Loss
 FROM global_ai.global_ai
 GROUP BY Industry
 ORDER BY Job_Loss DESC
 
 --  AI Adoption Rate per year
-SELECT	Year
-	,	Country
-    ,	`AI_Adoption_Rate_(%)`
+SELECT	 Year
+     ,	 Country
+     ,	`AI_Adoption_Rate_(%)`
 FROM global_ai.global_ai
 ORDER BY YEAR DESC , `AI_Adoption_Rate_(%)` DESC
 
 -- Countries AI adoption rate from 2020 to 2025
 SELECT	Country
-	,	ROUND(AVG(`AI_Adoption_Rate_(%)`),2) AS Adoption_Rate
+     ,	ROUND(AVG(`AI_Adoption_Rate_(%)`),2) AS Adoption_Rate
 FROM global_ai.global_ai
 GROUP BY Country
 ORDER BY Adoption_Rate DESC
 
 -- Human AI Collaboration based on Industry from 2020 to 2025
-SELECT 	Industry
-	,	ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
+SELECT   Industry
+      ,	 ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
 FROM global_ai.global_ai
 GROUP BY Industry
 ORDER BY Collaboration_Rate DESC
 
 -- Human AI Collaboration based on Country from 2020 to 2025
-SELECT 	Country
-	,	ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
+SELECT 	 Country
+      ,	 ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
 FROM global_ai.global_ai
 GROUP BY Country
 ORDER BY Collaboration_Rate DESC
 
 -- Average Human AI Collaboration Per Year
-SELECT 	Year
-	,	ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
+SELECT 	 Year
+     ,	 ROUND(AVG(`Human-AI_Collaboration_Rate_(%)`),2) AS Collaboration_Rate
 FROM global_ai.global_ai
 GROUP BY Year
 ORDER BY Collaboration_Rate DESC
 
 -- Industries with Consumer Trust in AI from 2020 to 2025
-SELECT 	Industry
-	,	ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
+SELECT 	 Industry
+      ,	 ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
 FROM global_ai.global_ai
 GROUP BY Industry
 ORDER BY Consumer_Trust_Percentage DESC
 
 -- Consumer Trust in AI from 2020 to 2025
-SELECT 	Year
-	,	ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
+SELECT 	 Year
+      ,	 ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
 FROM global_ai.global_ai
 GROUP BY Year
 ORDER BY Year DESC
 
 -- Countires Consumer Trust
-SELECT 	Country
-	,	ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
+SELECT   Country
+      ,	 ROUND(AVG(`Consumer_Trust_in_AI_(%)`),2) AS Consumer_Trust_Percentage
 FROM global_ai.global_ai
 GROUP BY Country
 ORDER BY Consumer_Trust_Percentage DESC
