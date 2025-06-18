@@ -112,12 +112,12 @@ WHERE	iso_code IS NULL
 	OR	location IS NULL 
 	OR	population IS NULL 
 	OR	date IS NULL
-	OR total_cases IS NULL
-	OR new_cases IS NULL
-	OR new_cases_smoothed IS NULL
-	OR total_deaths IS NULL
-	OR new_deaths IS NULL
-	OR new_deaths_smoothed IS NULL
+	OR 	total_cases IS NULL
+	OR 	new_cases IS NULL
+	OR 	new_cases_smoothed IS NULL
+	OR 	total_deaths IS NULL
+	OR 	new_deaths IS NULL
+	OR 	new_deaths_smoothed IS NULL
 
 SELECT *
 FROM covid_cases.covid_vaccinations
