@@ -1,5 +1,5 @@
 -- Duplication Of Table for Data Manipulation
-CREATE DATABASE IF NOT EXISTS Sleephealth;
+CREATE DATABASE IF NOT EXISTS sleep_health;
 
 USE sleep_health;
 
@@ -163,7 +163,7 @@ GROUP BY Sleep_Disorder
 -- Count Of Genders
 SELECTGENDER
 ,	COUNT(Gender) AS Count_Gender
-,	(COUNT(Gender) / SUM(COUNT(Gender)) OVER ()) * 100 AS Percentage
+,	ROUND((COUNT(Gender) / SUM(COUNT(Gender)) OVER ()) * 100,2) AS Percentage
 FROM sleep_health.sleephealth
 GROUP BY GENDER
 
