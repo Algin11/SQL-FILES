@@ -1,5 +1,5 @@
 -- Creating Table For Data Manipulation
-CREATE DATABASE IF NOT EXISTS coverage_by_country;
+CREATE DATABASE IF NOT EXISTS hiv_cases;
 
 USE hiv_cases;
 
@@ -22,7 +22,6 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
 
-CREATE DATABASE IF NOT EXISTS pediatric_coverage_by_country;
 
 USE hiv_cases;
 
@@ -44,7 +43,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
-CREATE DATABASE IF NOT EXISTS cases_adult_15_to_49_by_country;
+
 
 USE hiv_cases;
 
@@ -63,7 +62,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
-CREATE DATABASE IF NOT EXISTS death_by_country;
 
 USE hiv_cases;
 
@@ -82,7 +80,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
-CREATE DATABASE IF NOT EXISTS people_living_with_hiv;
 
 USE hiv_cases;
 
@@ -101,7 +98,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
-CREATE DATABASE IF NOT EXISTS prevention_of_mother_to_child;
 
 USE hiv_cases;
 
@@ -316,16 +312,16 @@ SELECT
 ,	WHO_Region
 ,	Reported_number_of_people_receiving_ART AS Number_of_people_receiving_ART
 ,	Estimated_number_of_people_living_with_HIV_median AS Number_of_people_living_with_HIV
-,	ROUND((Reported_number_of_people_receiving_ART/ Estimated_number_of_people_living_with_HIV_median ) * 100,2) AS Percentage_of_people_received_ART
+,	IFNULL(ROUND((Reported_number_of_people_receiving_ART/ Estimated_number_of_people_living_with_HIV_median ) * 100,2),0) AS Percentage_of_people_received_ART
 FROM hiv_cases.coverage_by_country
 
 -- Mother To Child Transmission
 SELECT 
 	Country
 ,	WHO_Region
-,	CAST(REPLACE(REPLACE(Received_Antiretrovirals, 'Nodata','0') , ' ','') AS FLOAT) AS Received_Antiretrovirals
+,	Received_Antiretrovirals AS Received_Antiretrovirals
 ,	Needing_antiretrovirals_median AS Needing_antiretrovirals
-,	ROUND((CAST(REPLACE(REPLACE(Received_Antiretrovirals, 'Nodata','0') , ' ','') AS FLOAT) / CAST(Needing_antiretrovirals_median AS FLOAT)) * 100,2) AS Percentage_of_received_ART
+,	IFNULL(ROUND((Received_Antiretrovirals/ Needing_antiretrovirals_median ) * 100,2),0) AS Percentage_of_received_ART
 FROM hiv_cases.prevention_of_mother_to_child
 
 -- Creating A Table With Number of Cases, Living With HIV, Received ART And Death
@@ -342,8 +338,8 @@ SELECT
 ,	L.Estimated_number_of_people_living_with_HIV_median AS Number_of_people_living_with_HIV
 ,	L.Reported_number_of_people_receiving_ART AS  Number_of_people_receiving_ART
 ,	D.Count_median AS Number_of_deaths
-,	ROUND((L.Reported_number_of_people_receiving_ART  / L.Estimated_number_of_people_living_with_HIV_median )*100,2) AS Percentage_of_people_received_ART
-,	ROUND((D.Count_median  / L.Estimated_number_of_people_living_with_HIV_median )*100,2) AS Percentage_of_deaths
+,	IFNULL(ROUND((L.Reported_number_of_people_receiving_ART  / L.Estimated_number_of_people_living_with_HIV_median )*100,2),0) AS Percentage_of_people_received_ART
+,	IFNULL(ROUND((D.Count_median  / L.Estimated_number_of_people_living_with_HIV_median )*100,2),0) AS Percentage_of_deaths
 FROM hiv_cases.coverage_by_country AS L
 LEFT JOIN HIV_DEATHS AS D
 	ON L.Country = D.Country
@@ -364,8 +360,8 @@ SELECT
 ,	SUM(L.Estimated_number_of_people_living_with_HIV_median) AS Total_number_of_people_living_with_HIV
 ,	SUM(L.Reported_number_of_people_receiving_ART) AS Total_number_of_received_ART
 ,	SUM(D.Count_median) AS Total_number_of_deaths
-,	(SUM(L.Reported_number_of_people_receiving_ART)  / SUM(L.Estimated_number_of_people_living_with_HIV_median))*100 AS Percentage_of_people_received_ART
-,	(SUM(D.Count_median)  / SUM(L.Estimated_number_of_people_living_with_HIV_median))*100 AS Percentage_of_People_Died
+,	ROUND(SUM(L.Reported_number_of_people_receiving_ART)  / SUM(L.Estimated_number_of_people_living_with_HIV_median),2)*100 AS Percentage_of_people_received_ART
+,	ROUND(SUM(D.Count_median)  / SUM(L.Estimated_number_of_people_living_with_HIV_median),2)*100 AS Percentage_of_People_Died
 FROM hiv_cases.coverage_by_country AS L
 JOIN HIV_DEATHS AS D
 	ON L.Country = D.Country
@@ -422,8 +418,8 @@ FROM hiv_cases.death_by_country
 ORDER BY Country ASC )
 	
 SELECT	SUM(A.Estimated_number_of_people_living_with_HIV_median) AS People_living_with_HIV
-,	(SUM(A.Reported_number_of_people_receiving_ART) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Percentage_with_ART
-,	(SUM(B.Count_median) / SUM(A.Estimated_number_of_people_living_with_HIV_median))*100 AS Death_Percentage
+,	ROUND(SUM(A.Reported_number_of_people_receiving_ART)*100  / SUM(A.Estimated_number_of_people_living_with_HIV_median),2)AS Percentage_with_ART
+,	ROUND(SUM(B.Count_median) *100 / SUM(A.Estimated_number_of_people_living_with_HIV_median),2) AS Death_Percentage
 FROM hiv_cases.coverage_by_country A
 INNER JOIN HIV_DEATHS B
 	ON A.Country = B.Country
