@@ -1,5 +1,5 @@
 -- Creating Table For Data Manipulation
-CREATE DATABASE IF NOT EXISTS Covid_Deaths;
+CREATE DATABASE IF NOT EXISTS Covid_Cases;
 
 USE Covid_Cases;
 
@@ -25,7 +25,6 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
 
-CREATE DATABASE IF NOT EXISTS Covid_Vaccinations;
 
 USE Covid_Cases;
 
@@ -171,7 +170,7 @@ SELECT	location
     ,   population
     ,	new_cases
     ,	total_cases
-    ,	(total_cases/population)*100  AS cases_percentage
+    ,	IFNULL(ROUND((total_cases/population)*100,2),0)  AS cases_percentage
 FROM covid_cases.Covid_Deaths
 ORDER BY 1,2
 
@@ -181,7 +180,7 @@ SELECT	location
      ,	total_cases
      ,	new_cases
      ,	total_deaths
-     ,	(total_deaths/total_cases)*100  AS death_percentage
+     ,	IFNULL(ROUND((total_deaths/total_cases)*100,2),0)  AS death_percentage
 FROM covid_cases.Covid_Deaths
 ORDER BY 1,2
 
@@ -189,7 +188,7 @@ ORDER BY 1,2
 SELECT	location
      ,	population
      ,	MAX(total_cases) AS covid_cases
-     ,	(MAX(total_cases)/population)*100  AS infection_rate
+     ,	IFNULL(ROUND((MAX(total_cases)/population)*100,2),0)  AS infection_rate
 FROM covid_cases.Covid_Deaths
 GROUP BY location, population
 ORDER BY infection_rate DESC
@@ -198,7 +197,7 @@ ORDER BY infection_rate DESC
 SELECT	location
      ,	population
      ,	MAX(total_cases) AS covid_cases
-     ,	(MAX(total_cases)/population)*100  AS infection_rate
+     ,	IFNULL(ROUND((MAX(total_cases)/population)*100,2),0)  AS infection_rate
 FROM covid_cases.Covid_Deaths
 GROUP BY location, population
 ORDER BY covid_cases DESC
@@ -267,7 +266,7 @@ JOIN covid_cases.Covid_Vaccinations V
   )
 
 SELECT * 
-  , 	(rolling_people_vaccination/Population)*100 AS RollingVaccinated_Percentage
+  , 	IFNULL(ROUND((rolling_people_vaccination/Population)*100,2),0) AS RollingVaccinated_Percentage
 FROM PopvsVac
 
 
@@ -295,9 +294,8 @@ JOIN covid_cases.Covid_Vaccinations V
 	ON D.location = V.location
 	and D.date = V.date
 
-SELECT * 
-, 
-(RollingVaccinated/Population)*100 AS RollingVaccinated_Percentage
+SELECT	* 
+   , 	IFNULL(ROUND((RollingVaccinated/Population)*100,2),0) AS RollingVaccinated_Percentage
 FROM PopulationVaccinated
 
 
