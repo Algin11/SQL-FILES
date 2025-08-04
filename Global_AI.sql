@@ -14,7 +14,7 @@ CREATE TABLE global_ai
  ,	Top_AI_Tools_Used VARCHAR(225)
  ,	Regulation_Status VARCHAR(225)
  ,	`Consumer_Trust_in_AI_(%)` FLOAT
- ,	`Market_Share_of_AI_Companies_(%)` FLOAT )
+ ,	`Market_Share_of_AI_Companies_(%)` FLOAT ) 
  
 SET GLOBAL LOCAL_INFILE = ON ;
 LOAD DATA LOCAL INFILE 'D:Data Analyst/Data analyst/PROJECTS/Global AI/Global_AI_Content_Impact_Dataset.csv' INTO TABLE global_ai
@@ -83,16 +83,16 @@ ORDER BY AI_Generated_Content_Volume DESC
 
 -- The Most Used AI in every Year
  WITH CTE AS (
-				SELECT  YEAR 
-					,	Top_AI_Tools_Used
-					,	COUNT(Top_AI_Tools_Used) * 1.0  AS Count
-				FROM global_ai.global_ai
-				GROUP BY YEAR, Top_AI_Tools_Used
-								)
-			,	RankedCTE AS (
-						SELECT 	*
-							,	RANK() OVER (PARTITION BY YEAR ORDER BY Count DESC) AS ranking
-						FROM CTE )
+		SELECT  YEAR 
+		   ,	Top_AI_Tools_Used
+		   ,	COUNT(Top_AI_Tools_Used) * 1.0  AS Count
+		FROM global_ai.global_ai
+		GROUP BY YEAR, Top_AI_Tools_Used
+				)
+,	RankedCTE AS (
+		SELECT 	*
+		    ,	RANK() OVER (PARTITION BY YEAR ORDER BY Count DESC) AS ranking
+		FROM CTE )
 								
 SELECT 	YEAR
 ,	Top_AI_Tools_Used, Count
@@ -120,7 +120,7 @@ ORDER BY 	Year DESC , `Revenue_Increase_Due_to_AI_(%)` DESC
      ,	  `Market_Share_of_AI_Companies_(%)`
      ,     Country
   FROM global_ai.global_ai
-  ORDER BY 	YEAR DESC , `Market_Share_of_AI_Companies_(%)` DESC
+  ORDER BY YEAR DESC , `Market_Share_of_AI_Companies_(%)` DESC
 
 -- Highest Market ShareHolder per year
  SELECT   Year
