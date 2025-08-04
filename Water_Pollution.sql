@@ -1,5 +1,5 @@
 -- DUPLICATE THE DATA FOR SAFE EDITING
-CREATE DATABASE IF NOT EXISTS Water_Pollution_dup;
+CREATE DATABASE IF NOT EXISTS water_pollution;
 
 USE water_pollution;
 
@@ -160,8 +160,8 @@ SELECT	Country
     ,	`Nitrate_Level_(mg/L)`
     ,	CASE
 		WHEN `Nitrate_Level_(mg/L)` < 10  THEN 'Safe for Infants'
-                        ELSE 'Not Safe for Infants'
-      		        END AS Water_Quality    
+                ELSE 'Not Safe for Infants'
+      		END AS Water_Quality    
 FROM water_pollution.water_pollution_dup
 ORDER BY YEAR DESC, Country ASC , Region ASC
 
